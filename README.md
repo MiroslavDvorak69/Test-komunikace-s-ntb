@@ -1,0 +1,1 @@
+# Test-komunikace-s-ntb
