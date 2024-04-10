@@ -1,3 +1,6 @@
+import requests
+from bs4 import BeautifulSoup
+
 def sestav_statistiku_slov(text):
     """
     Procedura přijme text od uživatele a vrátí seznam slov s počtem výskytů slov v procentech.
@@ -74,7 +77,46 @@ def vypis_shodnost_textu(text1, text2):
     print(f"Shodnost textu 2 s textem 1: {shodnost_textu2:.2f}%")
 
 # Příklad použití procedury vypis_shodnost_textu
-text1 = input("Zadejte první text: ")
-text2 = input("Zadejte druhý text: ")
+# text1 = input("Zadejte první text: ")
+# text2 = input("Zadejte druhý text: ")
 
+# URL adresa stránky s textem 1
+url = "https://cs.wikisource.org/wiki/Havran_(p%C5%99eklad_%C5%A0embera)"
+
+# Získání obsahu stránky
+response = requests.get(url)
+html_content = response.text
+
+# Analyzování HTML obsahu pomocí BeautifulSoup
+soup = BeautifulSoup(html_content, 'html.parser')
+
+# Hledání konkrétní části stránky s tagem div a třídou entrytext
+entry_text_div = soup.find('div', class_='poem')
+
+# Získání textu uvnitř tohoto divu
+text1 = entry_text_div.get_text(separator='\n')
+
+if text1:
+    print(text1)
+
+
+# URL adresa stránky s textem 2
+url = "https://www.odaha.com/edgar-allan-poe/basne/havran-preklad-jaroslav-vrchlicky"
+
+# Získání obsahu stránky
+response = requests.get(url)
+html_content = response.text
+
+# Analyzování HTML obsahu pomocí BeautifulSoup
+soup = BeautifulSoup(html_content, 'html.parser')
+
+# Hledání konkrétní části stránky s tagem div a třídou entrytext
+entry_text_div = soup.find('div', class_='entrytext')
+
+# Získání textu uvnitř tohoto divu
+text2 = entry_text_div.get_text(separator='\n')
+    
+if text2:
+    print(text2)
+    
 vypis_shodnost_textu(text1, text2)
